@@ -1,5 +1,3 @@
 # Innehåll
 
-Lägg berättelsen om Nisse här som `nils-jerlov.md`.
-
-Exportera den från dokumentet "Nils Gunnar Jerlov – havets ljus" som Markdown och spara filen i den här mappen.
+Berättelsen om Nils Gunnar Jerlov ligger i [nils-jerlov.md](nils-jerlov.md). Sidan återger samma sak i kortare form och låter siffrorna vara interaktiva. Ändra gärna texten här först, och för sedan över det som ska synas på sidan till `index.html`.
