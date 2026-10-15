@@ -41,7 +41,7 @@
       <div class="prose">
         <p>Nils Gunnar Jerlov kallades Nisse. Han var fysiker från Bosjökloster som blev oceanograf, och ombord på forskningsfartyget Albatross mätte han hur solljus dör ut under ytan i Atlanten, Stilla havet och Indiska oceanen. Ur de kurvorna, och ur senare mätningar, kom en skala: fem typer för öppet hav, I till III, och kusttyperna 1, 3, 5, 7 och 9.</p>
         <p>Skalan är inte en karta över länder. Den är ett spektrum. Varje typ säger hur mycket av varje färg som finns kvar en meter längre ner. Den siffran heter dämpningskoefficient, K<sub>d</sub>, och mäts per meter. Litet tal betyder klart vatten. Stort tal betyder att ljuset tar slut fort.</p>
-        <p>Sidan är gjord för att kunna läsas rakt igenom, och för att kunna vridas på. Siffrorna i dyket kommer från Jerlovs egen tabell. Bilderna under ytan är räknade ur samma modell, inte fotografier.</p>
+        <p>Sidan är gjord för att kunna läsas rakt igenom, och för att kunna vridas på. Siffrorna i dyket kommer från Jerlovs egen tabell. Bilderna under ytan är illustrationer av dyk i de haven. Siffran för sikten är räknad ur samma modell.</p>
       </div>
     </section>
 
@@ -156,19 +156,19 @@
     <section class="stack" id="under" aria-labelledby="under-rubrik">
       <span class="eyebrow">Samma fysik, tre hav</span>
       <h2 id="under-rubrik">Hur långt du ser</h2>
-      <p>Sikten i bilderna är en tumregel: ungefär 4,8 delat med stråldämpningen för den färg som når längst. Stråldämpningen är satt till 4,5 gånger K<sub>d</sub>, en grov kvot som i verkligheten varierar. Kontrasten är förstärkt, som i en kamera. Det är ritade scener, inte dykfoton.</p>
+      <p>Siffran under varje bild är en tumregel för sikten: ungefär 4,8 delat med stråldämpningen för den färg som når längst. Stråldämpningen är satt till 4,5 gånger K<sub>d</sub>, en grov kvot som i verkligheten varierar. Bilderna visar ett dyk i just det havet, med fiskar och en botten som hör hemma där, och med en sikt i den härleken. De är illustrationer, inte fotografier.</p>
       <div class="scenes">
         <figure class="scene">
-          <canvas id="sc1" width="960" height="600" aria-label="Sargassohavet, typ I, klart blått vatten med sargassotång"></canvas>
-          <figcaption><b>Sargassohavet</b> · typ I · 10 m · <span id="v1"></span><br>Flytande sargassotång och ett stim som syns långt bort. Botten ligger flera tusen meter ner.</figcaption>
+          <img src="img/sikt-sargasso.jpg" width="1280" height="720" alt="Klart blått vatten i Sargassohavet. Sargassotång flyter vid ytan, och fiskar syns långt ner i det blå.">
+          <figcaption><b>Sargassohavet</b> · typ I · 10 m · <span id="v1"></span><br>Flytande sargassotång och fiskar som syns långt bort. Ingen botten: här är det flera tusen meter djupt.</figcaption>
         </figure>
         <figure class="scene">
-          <canvas id="sc2" width="960" height="600" aria-label="Västkusten, typ 3, grönt vatten och tång på klippor"></canvas>
-          <figcaption><b>Västkusten</b> · typ 3 · 6 m · <span id="v2"></span><br>Sockertare, blåstång, berggylta och en torsk. Några meter bort tar det gröna över.</figcaption>
+          <img src="img/sikt-vastkusten.jpg" width="1280" height="720" alt="Grönt kustvatten på den svenska västkusten. Granit, tare och blåstång, en berggylta i förgrunden och en torsk längre bort.">
+          <figcaption><b>Västkusten</b> · typ 3 · 6 m · <span id="v2"></span><br>Granit, sockertare och blåstång, berggylta och torsk. Några meter bort tar det gröna över.</figcaption>
         </figure>
         <figure class="scene">
-          <canvas id="sc3" width="960" height="600" aria-label="Östersjön, typ 7, gulgrönt vatten med blåstång och musslor"></canvas>
-          <figcaption><b>Östersjön</b> · typ 7 · 4 m · <span id="v3"></span><br>Blåstång, blåmusslor och strömming. Det blå ljuset är nästan slut.</figcaption>
+          <img src="img/sikt-ostersjon.jpg" width="1280" height="720" alt="Gulgrönt grumligt vatten i Östersjön. Blåstång och blåmusslor på en klippa, och ett stim strömming nära kameran. Bakgrunden försvinner i diset.">
+          <figcaption><b>Östersjön</b> · typ 7 · 4 m · <span id="v3"></span><br>Blåstång, blåmusslor och strömming. Bakom stimmet är det blå ljuset nästan slut.</figcaption>
         </figure>
       </div>
     </section>
@@ -209,18 +209,26 @@
 
     <section class="stack" id="karta" aria-labelledby="karta-rubrik">
       <span class="eyebrow">Var finns vattnen?</span>
-      <h2 id="karta-rubrik">Albatross och en grov karta</h2>
-      <p>Jerlov ritade 1976 en världskarta över typer. Punkterna här är typiska värden ur litteraturen, inte en satellitbild. Linjen är Albatross ungefärliga rutt 1947–48, dragen mellan kända hamnar. Tryck på en punkt.</p>
+      <h2 id="karta-rubrik">Haven efter skalan</h2>
+      <p>Jerlov publicerade 1976 en världskarta, figur 72 i <em>Marine Optics</em>, med oceaniska typer från skeppsmätningar. Haven här är ifyllda efter det mönstret: de klaraste virvlarna som typ I, övriga subtropiska virvlar som IA, tropikerna mest som IB, och tempererade hav och uppvällning som II eller III. Gränserna är förenklade. Det är inte en satellitbild, och två expeditioner i samma ruta kan ha mätt olika typ.</p>
+      <p>Kusttyperna 1 till 9 ritade han inte ut över hela jorden. De kom från Skandinavien och Nordamerikas kust. Därför syns de i den nordiska kartan: Nordsjön som 1, västkusten och Kattegatt som 3, Östersjön som 7, Bottenviken, Finska viken och Göta älvs mynning som 9. Linjen är Albatross ungefärliga rutt 1947–48, dragen mellan kända hamnar. Tryck på en punkt.</p>
       <div class="figure">
-        <svg id="world" role="img" aria-label="Världskarta med Albatross rutt och vattentyper"></svg>
+        <div class="mapframe">
+          <canvas id="worldOcean" width="960" height="470" aria-hidden="true"></canvas>
+          <svg id="world" role="img" aria-label="Världskarta där haven är färgade efter Jerlovs skala, med Albatross rutt"></svg>
+        </div>
         <div class="legend">
           <span><i class="lg-route"></i>Albatross, 1947–48</span>
-          <span><i class="lg-dot"></i>Plats, färgad som vattnet på 10 m</span>
         </div>
+        <div class="legend" id="typeLegend" aria-label="Jerlovs typer"></div>
+        <p class="caption">Färgen är typens nyans på det djup där ljuset vid 465 nm har minskat till 37 procent. Då går typerna att skilja åt. Hur fort det blir mörkt syns i dyket, inte i de här färgerna.</p>
       </div>
       <div class="maprow">
         <div class="figure">
-          <svg id="nordic" role="img" aria-label="Karta över Skandinavien och Östersjön"></svg>
+          <div class="mapframe">
+            <canvas id="nordicOcean" width="420" height="360" aria-hidden="true"></canvas>
+            <svg id="nordic" role="img" aria-label="Karta över Skandinavien och Östersjön, färgad efter kusttyperna"></svg>
+          </div>
           <p class="caption">Nisses hemvatten. Från Nordsjön in i Östersjön, och ut genom Göta älv.</p>
         </div>
         <div class="sitecard" id="siteCard" aria-live="polite">
@@ -265,7 +273,7 @@
     <section class="stack" id="nisse" aria-labelledby="nisse-rubrik">
       <span class="eyebrow">Mannen bakom skalan</span>
       <h2 id="nisse-rubrik">Nils Gunnar Jerlov</h2>
-      <p>Fysikern som bytte röntgenspektra mot havets ljus, byggde upp ett centrum för optisk oceanografi i Köpenhamn, och lämnade efter sig en skala som både marinen och klimatmodellerna fortfarande räknar med. Sedan år 2000 delar <a href="https://tos.org/jerlov-medal" target="_blank" rel="noopener">The Oceanography Society</a> ut Jerlov Award till forskare som fört det arbetet vidare.</p>
+      <p>Fysikern som bytte röntgenspektra mot havets ljus, byggde upp ett centrum för optisk oceanografi i Köpenhamn, och lämnade efter sig en skala som både marinen och klimatmodellerna fortfarande räknar med. Sedan år 2000 delar The Oceanography Society ut <a href="https://tos.org/jerlov-medal" target="_blank" rel="noopener">Jerlovmedaljen</a> till forskare som fört det arbetet vidare.</p>
       <ol class="timeline">
         <li><time>1909</time><span>Föds 12 oktober i Bosjökloster, Skåne, son till David Johnson och Hilma Henriksson.</span></li>
         <li><time>1939</time><span>Disputerar i Lund på röntgenspektra: hur kemisk bindning syns i emissionen.</span></li>
@@ -276,6 +284,7 @@
         <li><time>1963</time><span>Professor i fysisk oceanografi i Köpenhamn. Han stannar till 1978 och samlar en internationell miljö kring havsoptik.</span></li>
         <li><time>1968</time><span><em>Optical Oceanography</em>. Skalan har då typerna I, IA, IB, II och III, plus kusttyperna. Omarbetas 1976 till <em>Marine Optics</em>.</span></li>
         <li><time>1990</time><span>Dör 29 maj i Göteborg. Gravsatt i minneslunden på Kviberg.</span></li>
+        <li><time>2000</time><span>The Oceanography Society instiftar <a href="https://tos.org/jerlov-medal" target="_blank" rel="noopener">Jerlovmedaljen</a>. Den delas ut för ny kunskap om hur ljus och hav möts.</span></li>
       </ol>
       <p class="caption">En längre text ligger i <a href="content/nils-jerlov.md">content/nils-jerlov.md</a>.</p>
     </section>
@@ -292,6 +301,7 @@
         <li><span>Paulson, C. A. &amp; Simpson, J. J. (1977).</span> Irradiance measurements in the upper ocean. Journal of Physical Oceanography 7, 952–956. Tvåbandsmodellen för typerna I–III.</li>
         <li><span>Buiteveld, H., Hakvoort, J. H. M. &amp; Donze, M. (1994).</span> The optical properties of pure water. SPIE Ocean Optics XII. Absorptionen i blandningsmodellen följer den tabell Williamson &amp; Hollins (2022) använder.</li>
         <li><span>Aas, E. m.fl.</span> Nordiska kusttyper på kartan följer den sammanställning som redan låg i sidans kartdata (Aas m.fl. 2013).</li>
+        <li><span>The Oceanography Society.</span> <a href="https://tos.org/jerlov-medal" target="_blank" rel="noopener">The Dr. Nils Gunnar Jerlov Medal</a>, utdelad sedan år 2000.</li>
       </ul>
       <p>Solljuset är en 5772 K svartkropp, inte ett uppmätt spektrum vid havsytan. Färgerna på skärmen går via en gaussisk anpassning av CIE 1931 och en enkel exponering, så att nyansen syns även när det blir mörkt. ”Så ljust ser det ut” är däremot den fotopiska resten, utan den exponeringen. Blandningsmodellen ska inte användas som mätning eller som klassificerare i fält.</p>
     </section>

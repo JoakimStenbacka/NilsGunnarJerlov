@@ -42,6 +42,13 @@ assert.ok(col.Y > 0.2, "type I at 10 m should still be bright, Y=" + col.Y);
 const dark = O.colorAt("9", 20);
 assert.ok(dark.Y < 0.02, "type 9 at 20 m should be dim, Y=" + dark.Y);
 
+const scaleI = O.scaleColor("I");
+const scale9 = O.scaleColor("9");
+assert.ok(scaleI.rgb[2] > scaleI.rgb[1], "type I on the map scale should be blue");
+assert.ok(scale9.rgb[0] > scale9.rgb[2], "type 9 on the map scale should be yellow");
+assert.ok(scaleI.rgb[2] > O.scaleColor("III").rgb[2] * 0.5, "clearer types stay blue");
+assert.strictEqual(O.hueName(scaleI.rgb), "blått");
+
 assert.strictEqual(O.hueName(O.colorAt("I", 10).rgb), "blått");
 assert.strictEqual(O.hueName(O.colorAt("3", 6).rgb), "grönt");
 assert.notStrictEqual(O.hueName(O.colorAt("9", 2).rgb), "rödaktigt");
