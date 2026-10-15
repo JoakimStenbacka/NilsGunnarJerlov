@@ -1,0 +1,7 @@
+{
+  "name": "nisses-hav-map",
+  "private": true,
+  "description": "Bygger kartdata (land, Albatross rutt, platser) till data/map.json",
+  "scripts": { "build": "node build.js 110m ../../data/map.json" },
+  "dependencies": { "d3-geo": "3.1.1", "topojson-client": "3.1.0", "world-atlas": "2.0.2" }
+}
