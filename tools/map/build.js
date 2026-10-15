@@ -1,6 +1,30 @@
 const d3 = require("d3-geo");
 const topo = require("topojson-client");
 const fs = require("fs");
+const { classify, letterFor } = require("./classify");
+
+function raster(proj, W, H, cols, rows, landGeom) {
+  const dx = W / cols;
+  const dy = H / rows;
+  const chars = new Array(rows * cols);
+  let n = 0;
+  for (let j = 0; j < rows; j++) {
+    const y = (j + 0.5) * dy;
+    for (let i = 0; i < cols; i++) {
+      const x = (i + 0.5) * dx;
+      const ll = proj.invert([x, y]);
+      let ch = ".";
+      if (ll && Number.isFinite(ll[0]) && Number.isFinite(ll[1])) {
+        const back = proj([ll[0], ll[1]]);
+        if (back && Math.hypot(back[0] - x, back[1] - y) <= dx) {
+          ch = d3.geoContains(landGeom, ll) ? "L" : letterFor(classify(ll[0], ll[1]));
+        }
+      }
+      chars[n++] = ch;
+    }
+  }
+  return { cols: cols, rows: rows, cells: chars.join("") };
+}
 const res = process.argv[2] || "110m";
 const land = topo.feature(require("world-atlas/land-" + res + ".json"), require("world-atlas/land-" + res + ".json").objects.land);
 const W = 960, H = 470;
@@ -37,7 +61,8 @@ const out = {
   land: path(land),
   route: path({ type: "LineString", coordinates: route }),
   sites: sites.map(s => { const p = proj([s.lon, s.lat]); return { ...s, x: +p[0].toFixed(1), y: +p[1].toFixed(1) }; }),
-  ports: [["Göteborg", 11.9, 57.7], ["Panama", -79.6, 9.1], ["Tahiti", -149.6, -17.5], ["Honolulu", -157.9, 21.3], ["Bali", 115.2, -8.6], ["Colombo", 79.85, 6.9], ["Seychellerna", 55.45, -4.6], ["Suez", 32.5, 29.9], ["Monaco", 7.4, 43.7]].map(([n, lo, la]) => { const p = proj([lo, la]); return { n, x: +p[0].toFixed(1), y: +p[1].toFixed(1) }; })
+  ports: [["Göteborg", 11.9, 57.7], ["Panama", -79.6, 9.1], ["Tahiti", -149.6, -17.5], ["Honolulu", -157.9, 21.3], ["Bali", 115.2, -8.6], ["Colombo", 79.85, 6.9], ["Seychellerna", 55.45, -4.6], ["Suez", 32.5, 29.9], ["Monaco", 7.4, 43.7]].map(([n, lo, la]) => { const p = proj([lo, la]); return { n, x: +p[0].toFixed(1), y: +p[1].toFixed(1) }; }),
+  ocean: raster(proj, W, H, 480, 235, land)
 };
 fs.writeFileSync(process.argv[3] || "map.json", JSON.stringify(out));
 console.log("land bytes", out.land.length);
@@ -55,7 +80,8 @@ const inset = {
   sites: sites.filter(s => ["nordsjon","vastkusten","ostersjon","gota"].includes(s.id)).map(s => { const p = ip([s.lon, s.lat]); return { id: s.id, x: +p[0].toFixed(1), y: +p[1].toFixed(1) }; }),
   route: ipath({ type: "LineString", coordinates: route.slice(0, 6) }),
   routeBack: ipath({ type: "LineString", coordinates: route.slice(-4) }),
-  labels: [["Göteborg", 11.95, 57.7], ["Stockholm", 18.07, 59.33], ["Köpenhamn", 12.57, 55.68], ["Lund", 13.19, 55.7]].map(([n, lo, la]) => { const p = ip([lo, la]); return { n, x: +p[0].toFixed(1), y: +p[1].toFixed(1) }; })
+  labels: [["Göteborg", 11.95, 57.7], ["Stockholm", 18.07, 59.33], ["Köpenhamn", 12.57, 55.68], ["Lund", 13.19, 55.7]].map(([n, lo, la]) => { const p = ip([lo, la]); return { n, x: +p[0].toFixed(1), y: +p[1].toFixed(1) }; }),
+  ocean: raster(ip, IW, IH, 210, 180, land50)
 };
 const o2 = JSON.parse(fs.readFileSync(process.argv[3] || "map.json"));
 o2.inset = inset;

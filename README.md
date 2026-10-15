@@ -6,7 +6,8 @@ En webbplats om oceanografen Nils Gunnar Jerlov (1909–1990): hur solljus bryts
 
 | Sökväg | Vad |
 |---|---|
-| `index.html` | Sidan. Berättelse, Snells fönster, dyk genom de tio typerna, tre undervattensscener, en blandningsmodell, karta, mätning och tidslinje. |
+| `index.html` | Sidan. Berättelse, Snells fönster, dyk genom de tio typerna, tre undervattensbilder, en blandningsmodell, karta, mätning och tidslinje. |
+| `img/` | Illustrationer av sikten i Sargassohavet, på västkusten och i Östersjön. |
 | `css/site.css` | Utseende. |
 | `js/optics.js` | Snells lag, Fresnel, K<sub>d</sub> ur Jerlov 1976 och färgräkningen. |
 | `js/app.js` | Interaktionen. |
@@ -55,9 +56,10 @@ node -e "const fs=require('fs'); fs.writeFileSync('../../data/map.js','window.MA
 - K<sub>d</sub> är de tryckta knutpunkterna i Jerlov, *Marine Optics* (1976), tabell XXVII. Mellan knutpunkterna är kurvan rätlinjig. Kusttyperna heter 1C–9C i tabellen och 1–9 på sidan.
 - Blandningsmodellen är en pedagogisk summa av rent vatten, gult ämne, plankton och en grå partikeldämpning. Den är inte en inversion av tabellen.
 - Brytningsindex 1,34 är ett typiskt värde för havsvatten i synligt ljus. Sötvatten ligger närmare 1,333.
-- Vattentyperna på kartan är typiska värden ur litteraturen, inte satellitmätningar.
+- Haven på kartan är färglagda efter mönstret i Jerlovs figur 72 (1976): oceaniska typer från skeppsmätningar, med utjämnade gränser. Det är inte en satellitbild. Kusttyperna 1–9 är bara utritade i de nordiska haven som sidan redan anger.
+- Kartfärgen är typens nyans där ljuset vid 465 nm har minskat till 37 procent, så att typerna går att skilja. Hur mörkt det blir syns i dyket.
 - Albatross rutt är ritad mellan kända hamnar.
-- Undervattensscenerna är illustrationer. Sikten är tumregeln 4,8 delat med en stråldämpning satt till 4,5 gånger K<sub>d</sub>.
+- Undervattensbilderna är illustrationer av dyk i Sargassohavet, på västkusten och i Östersjön. Sikten under bilden är tumregeln 4,8 delat med en stråldämpning satt till 4,5 gånger K<sub>d</sub>.
 
 ## Licenser
 

@@ -211,6 +211,13 @@
     return expose(integrate(function (w) { return kAt(type, w) * z; }));
   }
 
+  /* Nyans när ljuset vid 465 nm har gått en e-faldingslängd.
+     Ljusstyrkan är lyft i expose(), så färgen skiljer typerna åt.
+     Den säger inte hur ljust havet ser ut från ett fartyg. */
+  function scaleColor(type) {
+    return colorAt(type, 1 / kAt(type, 465));
+  }
+
   function colorModel(ag440, chl, kp, z) {
     return expose(integrate(function (w) { return modelK(ag440, chl, kp, w) * z; }));
   }
@@ -286,6 +293,7 @@
     modelK: modelK,
     nearestType: nearestType,
     colorAt: colorAt,
+    scaleColor: scaleColor,
     colorModel: colorModel,
     css: css,
     wlRGB: wlRGB,

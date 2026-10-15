@@ -30,9 +30,9 @@ Senare expeditioner lade till material: den italiensk-svenska expeditionen 1955,
 
 ## Efteråt
 
-Jerlov dog den 29 maj 1990 i Göteborg och är gravsatt i minneslunden på Kviberg. Sedan år 2000 delar The Oceanography Society ut Jerlov Award till forskare som fört kunskapen om ljus i havet vidare.
+Jerlov dog den 29 maj 1990 i Göteborg och är gravsatt i minneslunden på Kviberg. Sedan år 2000 delar The Oceanography Society ut [Jerlovmedaljen](https://tos.org/jerlov-medal) till forskare som fört kunskapen om ljus i havet vidare.
 
-Typen säger inte allt. Två vatten med samma K<sub>d</sub> kan ha olika blandning av gult ämne, plankton och mineralpartiklar, och K<sub>d</sub> ändras med solhöjd och med djupet. Tabellen är ett typiskt spektrum, ett språk att jämföra mätningar med, inte en prognos för en viss vik en viss dag. Kartan på sidan är samma sorts förenkling: typiska värden ur litteraturen, och en rutt dragen mellan hamnar, inte en satellitbild av expeditionen.
+Typen säger inte allt. Två vatten med samma K<sub>d</sub> kan ha olika blandning av gult ämne, plankton och mineralpartiklar, och K<sub>d</sub> ändras med solhöjd och med djupet. Tabellen är ett typiskt spektrum, ett språk att jämföra mätningar med, inte en prognos för en viss vik en viss dag. Kartan på sidan följer mönstret i Jerlovs figur 72 från 1976, med utjämnade gränser, och kusttyperna bara där sidan redan har belägg. Den är inte en satellitbild, och Albatross rutt är dragen mellan hamnar.
 
 ## Att läsa
 

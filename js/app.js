@@ -437,7 +437,7 @@
   }
   function addSite(svg, s, x, y, r, labelLeft) {
     var g = el("g", { "class": "site", "data-id": s.id, tabindex: "0", role: "button", "aria-label": s.name + ", typ " + s.range }, svg);
-    el("circle", { cx: x, cy: y, r: r, fill: O.css(O.colorAt(s.type, 10).rgb) }, g);
+    el("circle", { cx: x, cy: y, r: r, fill: O.css(O.scaleColor(s.type).rgb) }, g);
     var t = el("text", { x: labelLeft ? x - r - 4 : x + r + 4, y: y + 4, "text-anchor": labelLeft ? "end" : "start" }, g);
     t.textContent = s.range;
     function go() { selectSite(s.id); }
@@ -486,136 +486,57 @@
   });
   selectSite(selected);
 
-  /* ---------- undervattensscener ---------- */
-  function scene(canvasId, labelId, opt) {
-    var cv = document.getElementById(canvasId);
-    var c = cv.getContext("2d"), W = cv.width, H = cv.height;
-    var seed = opt.seed || 1;
-    function rnd() { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }
-    var t = opt.type, kR = O.kAt(t, 600), kG = O.kAt(t, 530), kB = O.kAt(t, 465);
-    var F = 4.5, cR = F * kR, cG = F * kG, cB = F * kB;
-    function E(z) { return [Math.exp(-kR * z), Math.exp(-kG * z), Math.exp(-kB * z)]; }
-    var zc = opt.depth, Ec = E(zc), norm = Math.max(Ec[0], Ec[1], Ec[2]);
-    var vis = 4.8 / Math.min(cR, cG, cB);
-    document.getElementById(labelId).textContent = "sikt omkring " + (vis >= 10 ? String(Math.round(vis / 5) * 5) : sv(vis, 1)) + " m";
-    var Wc = [Ec[0] * 0.30 / norm, Ec[1] * 0.42 / norm, Ec[2] * 0.55 / norm];
-    function gv(v) { return Math.round(O.gam(Math.min(1, v)) * 255); }
-    function shade(alb, d, z, bright) {
-      var Ez = E(Math.max(0, z)), b = bright || 1, T = [Math.exp(-cR * d), Math.exp(-cG * d), Math.exp(-cB * d)];
-      var o = [alb[0] * Ez[0] * 0.9 * b / norm, alb[1] * Ez[1] * 0.9 * b / norm, alb[2] * Ez[2] * 0.9 * b / norm];
-      var K = 2.4;
-      function mix(i) { var v = o[i] * T[i] + Wc[i] * (1 - T[i]); return gv(Math.max(0, Wc[i] + (v - Wc[i]) * K)); }
-      return "rgb(" + mix(0) + "," + mix(1) + "," + mix(2) + ")";
+  var SCALE_LETTER = { I: "I", A: "IA", B: "IB", "2": "II", "3": "III", "1": "1", c: "3", "5": "5", "7": "7", "9": "9" };
+  var scaleRgb = {};
+  Object.keys(SCALE_LETTER).forEach(function (ch) {
+    var rgb = O.scaleColor(SCALE_LETTER[ch]).rgb;
+    scaleRgb[ch] = rgb.map(function (v) { return Math.round(Math.min(255, Math.max(0, v))); });
+  });
+  var landRgb = [28, 58, 77];
+  function paintOcean(canvas, grid) {
+    if (!grid || !grid.cells) return;
+    var cols = grid.cols, rows = grid.rows, cells = grid.cells;
+    var tmp = document.createElement("canvas");
+    tmp.width = cols;
+    tmp.height = rows;
+    var img = tmp.getContext("2d").createImageData(cols, rows);
+    var data = img.data;
+    for (var i = 0; i < cells.length; i++) {
+      var rgb = cells.charAt(i) === "L" ? landRgb : scaleRgb[cells.charAt(i)];
+      var o = i * 4;
+      if (!rgb) continue;
+      data[o] = rgb[0];
+      data[o + 1] = rgb[1];
+      data[o + 2] = rgb[2];
+      data[o + 3] = 255;
     }
-    var yh = H * opt.horizon;
-    for (var y = 0; y < H; y += 2) {
-      var f = 1.9 - 1.4 * (y / H);
-      c.fillStyle = "rgb(" + gv(Wc[0] * f) + "," + gv(Wc[1] * f) + "," + gv(Wc[2] * f) + ")";
-      c.fillRect(0, y, W, 2);
-    }
-    if (opt.rays) {
-      c.save();
-      c.globalCompositeOperation = "lighter";
-      for (var i = 0; i < 7; i++) {
-        var x0 = W * (0.1 + rnd() * 0.8);
-        var gr = c.createLinearGradient(0, 0, 0, H * 0.8);
-        gr.addColorStop(0, "rgba(180,220,255," + (0.10 * opt.rays) + ")");
-        gr.addColorStop(1, "rgba(180,220,255,0)");
-        c.fillStyle = gr;
-        c.beginPath(); c.moveTo(x0 - 8, 0); c.lineTo(x0 + 8, 0); c.lineTo(x0 + 60 + rnd() * 40, H * 0.8); c.lineTo(x0 + 20, H * 0.8); c.closePath(); c.fill();
-      }
-      c.restore();
-    }
-    var FOC = 480, hc = opt.camHeight || 1.6;
-    function proj(d) { return { y: yh + hc * FOC / d, s: FOC / d }; }
-    var items = [];
-    if (opt.bottom) {
-      for (var yy = Math.ceil(yh) + 1; yy < H; yy += 2) {
-        var d = hc * FOC / (yy - yh);
-        if (d > 200) continue;
-        var tex = 0.75 + 0.25 * Math.sin(yy * 0.9) * Math.sin(yy * 0.13);
-        c.fillStyle = shade(opt.bottom.map(function (v) { return v * tex; }), d, zc + hc, 1);
-        c.fillRect(0, yy, W, 2);
-      }
-    }
-    (opt.objects || []).forEach(function (o) {
-      for (var n = 0; n < o.n; n++) items.push({ kind: o.kind, d: o.dmin + rnd() * (o.dmax - o.dmin), x: rnd(), alb: o.alb, h: o.h, u: rnd(), v: rnd() });
-    });
-    items.sort(function (a, b) { return b.d - a.d; });
-    items.forEach(function (it) {
-      var p = proj(it.d), x = it.x * W * 1.3 - W * 0.15, s = p.s, col;
-      var zObj = zc + hc - (it.h || 0) * 0.5;
-      if (it.kind === "rock") {
-        c.fillStyle = shade(it.alb, it.d, zc + hc, 1);
-        c.beginPath();
-        var rw = (0.1 + it.u * 0.3) * s, rh = rw * (0.5 + it.v * 0.4);
-        c.ellipse(x, p.y - rh * 0.35, rw, rh, 0, Math.PI, 0); c.fill();
-      } else if (it.kind === "mussel") {
-        c.fillStyle = shade(it.alb, it.d, zc + hc, 1);
-        for (var m = 0; m < 9; m++) { c.beginPath(); c.ellipse(x + (m % 3 - 1) * 0.09 * s, p.y - 0.05 * s - Math.floor(m / 3) * 0.05 * s, 0.05 * s, 0.025 * s, 0.6, 0, 7); c.fill(); }
-      } else if (it.kind === "kelp") {
-        col = shade(it.alb, it.d, zObj, 1); c.strokeStyle = col; c.fillStyle = col;
-        var hgt = it.h * s;
-        c.lineWidth = Math.max(1, 0.03 * s);
-        c.beginPath(); c.moveTo(x, p.y); c.quadraticCurveTo(x + 0.2 * s, p.y - hgt * 0.5, x + (it.u - 0.3) * 0.6 * s, p.y - hgt * 0.35); c.stroke();
-        c.beginPath();
-        var bx = x + (it.u - 0.3) * 0.6 * s, by = p.y - hgt * 0.35;
-        c.moveTo(bx, by);
-        c.bezierCurveTo(bx + 0.35 * s, by - hgt * 0.3, bx - 0.25 * s, by - hgt * 0.6, bx + 0.3 * s * (it.v - 0.5), p.y - hgt);
-        c.bezierCurveTo(bx - 0.05 * s, by - hgt * 0.55, bx + 0.15 * s, by - hgt * 0.3, bx, by);
-        c.fill();
-      } else if (it.kind === "wrack") {
-        col = shade(it.alb, it.d, zObj, 1); c.strokeStyle = col; c.lineCap = "round";
-        var hg = it.h * s;
-        for (var b = 0; b < 7; b++) {
-          c.lineWidth = Math.max(1, 0.045 * s);
-          c.beginPath(); c.moveTo(x, p.y);
-          var a = -Math.PI / 2 + (b - 3) * 0.22 + (it.u - 0.5) * 0.3;
-          c.quadraticCurveTo(x + Math.cos(a) * hg * 0.5 + (it.v - 0.5) * 0.2 * s, p.y + Math.sin(a) * hg * 0.5, x + Math.cos(a) * hg, p.y + Math.sin(a) * hg);
-          c.stroke();
-        }
-      } else if (it.kind === "fish" || it.kind === "cod" || it.kind === "wrasse" || it.kind === "herring") {
-        var len = (it.kind === "cod" ? 0.7 : it.kind === "wrasse" ? 0.35 : it.kind === "herring" ? 0.22 : 0.4) * s;
-        var fy = p.y - (it.h || 0.8) * s, dir = it.u > 0.5 ? 1 : -1;
-        col = shade(it.alb, it.d, zc + hc - (it.h || 0.8), it.kind === "wrasse" ? 1.1 : 1);
-        c.fillStyle = col;
-        c.beginPath(); c.ellipse(x, fy, len * 0.5, len * (it.kind === "cod" ? 0.17 : 0.16), 0, 0, 7); c.fill();
-        c.beginPath(); c.moveTo(x - dir * len * 0.45, fy); c.lineTo(x - dir * len * 0.72, fy - len * 0.16); c.lineTo(x - dir * len * 0.72, fy + len * 0.16); c.closePath(); c.fill();
-        if (it.kind === "cod") {
-          c.beginPath(); c.moveTo(x - dir * 0.05 * len, fy - len * 0.14); c.lineTo(x + dir * 0.1 * len, fy - len * 0.27); c.lineTo(x + dir * 0.2 * len, fy - len * 0.14); c.fill();
-        }
-      } else if (it.kind === "school") {
-        var count = 24 + Math.floor(it.u * 20);
-        col = shade(it.alb, it.d, zc - 1, 1); c.fillStyle = col;
-        var cx = x, cy = yh + (it.v - 0.5) * H * 0.25;
-        for (var q = 0; q < count; q++) {
-          var fx = cx + (rnd() - 0.5) * 7 * s, fyy = cy + (rnd() - 0.5) * 2.5 * s, L = 0.6 * s;
-          c.beginPath(); c.ellipse(fx, fyy, L * 0.5, L * 0.15, 0, 0, 7); c.fill();
-          c.beginPath(); c.moveTo(fx - L * 0.45, fyy); c.lineTo(fx - L * 0.7, fyy - L * 0.14); c.lineTo(fx - L * 0.7, fyy + L * 0.14); c.fill();
-        }
-      } else if (it.kind === "sargassum") {
-        col = shade(it.alb, it.d, 1, 1.2); c.fillStyle = col;
-        var sx = x, sy = H * 0.06 + it.v * H * 0.08, R = 1.2 * s;
-        for (var u = 0; u < 40; u++) {
-          var ang = rnd() * 6.28, rr = rnd() * R;
-          c.beginPath(); c.ellipse(sx + Math.cos(ang) * rr, sy + Math.sin(ang) * rr * 0.35, 0.08 * s, 0.03 * s, ang, 0, 7); c.fill();
-        }
-        c.fillStyle = shade([0.55, 0.5, 0.4], it.d + 1, zc - 2, 1);
-        for (var u2 = 0; u2 < 6; u2++) {
-          c.beginPath(); c.ellipse(sx + (rnd() - 0.5) * R, sy + 0.4 * s + rnd() * 0.5 * s, 0.07 * s, 0.025 * s, 0, 0, 7); c.fill();
-        }
-      }
-    });
-    var np = opt.particles || 40;
-    c.fillStyle = "rgba(255,255,240,0.35)";
-    for (var pz = 0; pz < np; pz++) { c.beginPath(); c.arc(rnd() * W, rnd() * H, 0.6 + rnd() * 1.6, 0, 7); c.fill(); }
+    tmp.getContext("2d").putImageData(img, 0, 0);
+    var ctx = canvas.getContext("2d");
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(tmp, 0, 0, canvas.width, canvas.height);
   }
-  scene("sc1", "v1", { type: "I", depth: 10, horizon: 0.62, rays: 1, particles: 25, seed: 7, camHeight: 30,
-    objects: [{ kind: "school", n: 2, dmin: 18, dmax: 40, alb: [0.55, 0.6, 0.65] }, { kind: "sargassum", n: 3, dmin: 4, dmax: 14, alb: [0.75, 0.55, 0.2] }, { kind: "fish", n: 5, dmin: 2, dmax: 6, alb: [0.45, 0.55, 0.6], h: 30 }] });
-  scene("sc2", "v2", { type: "3", depth: 6, horizon: 0.36, rays: 0.35, particles: 110, seed: 11, camHeight: 1.0, bottom: [0.55, 0.5, 0.4],
-    objects: [{ kind: "rock", n: 16, dmin: 1.3, dmax: 12, alb: [0.14, 0.14, 0.13] }, { kind: "wrack", n: 12, dmin: 1.3, dmax: 9, alb: [0.16, 0.12, 0.04], h: 0.6 }, { kind: "kelp", n: 9, dmin: 1.6, dmax: 10, alb: [0.28, 0.2, 0.07], h: 1.5 }, { kind: "wrasse", n: 3, dmin: 1.5, dmax: 4, alb: [0.7, 0.35, 0.15], h: 0.6 }, { kind: "cod", n: 1, dmin: 2.2, dmax: 2.6, alb: [0.38, 0.32, 0.2], h: 0.45 }] });
-  scene("sc3", "v3", { type: "7", depth: 4, horizon: 0.36, rays: 0, particles: 260, seed: 23, camHeight: 0.7, bottom: [0.5, 0.46, 0.36],
-    objects: [{ kind: "rock", n: 14, dmin: 0.9, dmax: 6, alb: [0.15, 0.15, 0.14] }, { kind: "mussel", n: 14, dmin: 0.9, dmax: 3, alb: [0.03, 0.03, 0.05] }, { kind: "wrack", n: 12, dmin: 0.9, dmax: 5, alb: [0.15, 0.12, 0.04], h: 0.45 }, { kind: "herring", n: 16, dmin: 1.2, dmax: 3.5, alb: [0.95, 0.95, 0.98], h: 0.5 }] });
+  paintOcean(document.getElementById("worldOcean"), M.ocean);
+  paintOcean(document.getElementById("nordicOcean"), M.inset.ocean);
+  var typeLegend = document.getElementById("typeLegend");
+  O.ORDER.forEach(function (t) {
+    var s = document.createElement("span");
+    var sw = document.createElement("i");
+    sw.className = "lg-type";
+    sw.style.background = O.css(O.scaleColor(t).rgb);
+    s.appendChild(sw);
+    s.appendChild(document.createTextNode("typ " + t));
+    typeLegend.appendChild(s);
+  });
+
+  /* ---------- sikt under ytan ---------- */
+  function sightLabel(type) {
+    var beam = 4.5 * Math.min(O.kAt(type, 465), O.kAt(type, 530), O.kAt(type, 600));
+    var vis = 4.8 / beam;
+    return "sikt omkring " + (vis >= 10 ? String(Math.round(vis / 5) * 5) : sv(vis, 1)) + " m";
+  }
+  document.getElementById("v1").textContent = sightLabel("I");
+  document.getElementById("v2").textContent = sightLabel("3");
+  document.getElementById("v3").textContent = sightLabel("7");
 
   /* ---------- Forel-Ule ---------- */
   var FU = [[33, 88, 188], [49, 109, 197], [50, 124, 187], [75, 128, 160], [86, 143, 150], [109, 146, 152], [105, 140, 134], [117, 158, 114], [123, 166, 84], [125, 174, 56], [149, 182, 69], [148, 182, 96], [165, 188, 118], [170, 184, 109], [173, 181, 95], [168, 169, 101], [174, 159, 92], [179, 160, 83], [175, 138, 68], [164, 105, 5], [161, 77, 4]];
